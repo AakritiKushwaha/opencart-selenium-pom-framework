@@ -1,15 +1,34 @@
-# OpenCart Selenium Automation
+# OpenCart UI Test Automation
 
-Java-based UI automation for the OpenCart demo application, built with Selenium WebDriver, TestNG, and the Page Object Model. The framework supports multiple browser and environment configurations, Excel-driven test data, and ExtentReports/Allure reporting.
+A Java 17 UI automation framework for OpenCart using Selenium WebDriver, TestNG, and the Page Object Model. It demonstrates reusable page objects, parallel test execution, Excel-driven test data, and automated execution reporting.
+
+Test target: [OpenCart demo login](https://naveenautomationlabs.com/opencart/index.php?route=account/login).
+
+## Project Highlights
+
+- Page Object Model separates page interactions from test assertions.
+- TestNG runs suite tests in parallel, with up to four test threads; WebDriver instances are stored per thread.
+- Apache POI reads product-search and registration data from Excel.
+- ExtentReports and Allure listeners capture execution results; failed tests attach screenshots to the Extent report.
+
+## Test Coverage
+
+| Area | Checks |
+| --- | --- |
+| Login | Page title and URL, forgot-password link, successful login |
+| Account | Page title, logout link, account-section headings |
+| Product search | Excel-driven searches, product selection, image count, product details |
+
+The registration test class is also implemented and reads Excel data, but it is not included in the default regression suite.
 
 ## Prerequisites
 
 - JDK 17
-- Apache Maven 3.8 or later
+- Apache Maven
 - Chrome, Firefox, Edge, or Safari (Safari requires macOS)
 - Network access to the configured OpenCart application
 
-Selenium Manager/WebDriverManager handles driver setup for the supported browsers. Confirm Maven is using Java 17 with `mvn -version`.
+WebDriverManager provisions browser drivers. Confirm Maven is using Java 17 with `mvn -version`.
 
 ## Run Tests
 
@@ -19,15 +38,15 @@ Run the default regression suite from the project root:
 mvn clean test
 ```
 
-The default suite is `src/test/resources/testrunner/testng_regression.xml`. It covers login, account-page, and product-search tests. To select another environment, pass one of `qa`, `stage`, `dev`, `uat`, or `prod`:
+The default suite is `src/test/resources/testrunner/testng_regression.xml`. It covers login, account, and product-search tests and runs TestNG tests in parallel. To select an environment, pass one of `qa`, `stage`, `dev`, `uat`, or `prod`:
 
 ```bash
 mvn clean test -Denv=qa
 ```
 
-When `env` is omitted, the framework uses the QA configuration. Browser, URL, headless mode, and incognito mode are set in the selected properties file under `src/test/resources/config/`. The browser options support Chrome and Firefox; the driver factory also recognizes Edge and Safari.
+When `env` is omitted, the framework uses the QA configuration. Browser, URL, headless mode, and incognito mode are configured in the selected properties file under `src/test/resources/config/`. Chrome and Firefox options include headless and incognito settings; the driver factory also recognizes Edge and Safari.
 
-The `RegisterTest` class is available in the test source, but it is not currently included in the default regression suite. The `testng_sanity.xml` file is currently empty; populate it with a valid TestNG suite before selecting it.
+The `testng_sanity.xml` file is currently empty and is not a runnable suite.
 
 ## Test Data
 
@@ -45,7 +64,7 @@ To view an Allure report, install the Allure command-line tool and run:
 allure serve allure-results
 ```
 
-Generated reports, screenshots, and test output are local run artifacts; review `.gitignore` before committing them.
+Generated reports, screenshots, and test output are local run artifacts and are ignored by `.gitignore`.
 
 ## Project Layout
 
@@ -69,4 +88,4 @@ src/
 
 ## Before Publishing
 
-The environment properties currently include hard-coded application login credentials. Replace them with non-sensitive test credentials or load credentials from a local, untracked configuration or environment variables before pushing this repository. If those values are real or have been shared, rotate them. Do not commit account passwords or other secrets.
+The environment property files currently contain hard-coded application login credentials. Replace these with non-sensitive demo credentials before publishing. If any values are real or have been shared, rotate them and remove them from the repository history as appropriate. The framework currently reads credentials from these property files; environment-variable credential loading is not implemented. Never publish account passwords or other secrets.
