@@ -86,6 +86,3 @@ src/
       testdata/      Excel test data
 ```
 
-## Before Publishing
-
-The environment property files currently contain hard-coded application login credentials. Replace these with non-sensitive demo credentials before publishing. If any values are real or have been shared, rotate them and remove them from the repository history as appropriate. The framework currently reads credentials from these property files; environment-variable credential loading is not implemented. Never publish account passwords or other secrets.
